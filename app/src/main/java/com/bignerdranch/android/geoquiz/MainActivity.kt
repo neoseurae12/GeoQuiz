@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
             checkAnswer(userAnswer = false)
         }
 
+        binding.previousButton.setOnClickListener {
+            previousQuestion()
+        }
+
         binding.nextButton.setOnClickListener {
             nextQuestion()
         }
@@ -49,6 +53,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         binding.questionTextView.setText(questionTextResId)
+    }
+
+    private fun previousQuestion() {
+        currentIndex = (currentIndex - 1) % questionBank.size
+
+        updateQuestion()
     }
 
     private fun nextQuestion() {
