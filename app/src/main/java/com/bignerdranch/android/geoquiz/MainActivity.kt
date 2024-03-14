@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var currentIndex = 0
+    private var score = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,13 +145,24 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer(userAnswer: Boolean) {
         val correctAnswer = questionBank[currentIndex].answer
 
-        val messageResId = if (userAnswer == correctAnswer) {
-            R.string.correct_toast
+        val (messageResId: Int, bonus: Int) = if (userAnswer == correctAnswer) {
+            Pair(R.string.correct_toast, 1)
         } else {
-            R.string.incorrect_toast
+            Pair(R.string.incorrect_toast, 0)
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+        score += bonus
+    }
+
+    private fun grade() {
+        if (questionBank.all { it.isAnswered }) {
+            Log.d(TAG, "$score")
+            val percentageScore = 100.0 * score / questionBank.size
+            val message = String.format(getString(R.string.percentage_score), percentageScore)
+            Toast.makeText(this, message, Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 }
