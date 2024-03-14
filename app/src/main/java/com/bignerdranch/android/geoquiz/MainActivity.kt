@@ -33,10 +33,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.trueButton.setOnClickListener { view: View ->
             checkAnswer(userAnswer = true)
+
+            questionBank[currentIndex].isAnswered = true
+            updateAnswerButtons()
         }
 
         binding.falseButton.setOnClickListener { view: View ->
             checkAnswer(userAnswer = false)
+
+            questionBank[currentIndex].isAnswered = true
+            updateAnswerButtons()
         }
 
         binding.previousButton.setOnClickListener {
@@ -52,6 +58,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateQuestion()
+        updateAnswerButtons()
+        updateNavigationButtons()
+    }
+
     override fun onStart() {
         super.onStart()
         Log.d(TAG, "onStart() called")
@@ -81,12 +91,50 @@ class MainActivity : AppCompatActivity() {
         currentIndex = (currentIndex - 1) % questionBank.size
 
         updateQuestion()
+        updateAnswerButtons()
+        updateNavigationButtons()
     }
 
     private fun nextQuestion() {
         currentIndex = (currentIndex + 1) % questionBank.size
 
         updateQuestion()
+        updateAnswerButtons()
+        updateNavigationButtons()
+    }
+
+    private fun updateQuestion() {
+        val questionTextResId = questionBank[currentIndex].textResId
+        binding.questionTextView.setText(questionTextResId)
+    }
+
+    private fun updateAnswerButtons() {
+        val isAnswered = questionBank[currentIndex].isAnswered
+        if (isAnswered) {
+            binding.trueButton.isEnabled = false
+            binding.falseButton.isEnabled = false
+        } else {
+            binding.trueButton.isEnabled = true
+            binding.falseButton.isEnabled = true
+        }
+    }
+
+    private fun updateNavigationButtons() {
+        val lastIndex = questionBank.size - 1
+        when (currentIndex) {
+            0 -> {
+                binding.previousButton.visibility = View.INVISIBLE
+                binding.nextButton.visibility = View.VISIBLE
+            }
+            lastIndex -> {
+                binding.previousButton.visibility = View.VISIBLE
+                binding.nextButton.visibility = View.INVISIBLE
+            }
+            else -> {
+                binding.previousButton.visibility = View.VISIBLE
+                binding.nextButton.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
