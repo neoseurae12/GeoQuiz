@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
             questionBank[currentIndex].isAnswered = true
             updateAnswerButtons()
+
+            grade()
         }
 
         binding.falseButton.setOnClickListener { view: View ->
@@ -43,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
             questionBank[currentIndex].isAnswered = true
             updateAnswerButtons()
+
+            grade()
         }
 
         binding.previousButton.setOnClickListener {
