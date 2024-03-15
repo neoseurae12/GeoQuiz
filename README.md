@@ -20,3 +20,5 @@ setContentView(binding.root)
     - 동적으로 View를 생성하거나 다른 레이아웃 파일에서 inflate한 View를 사용할 때 유용
 
 ## Vector Drawable
+
+## ViewModel
