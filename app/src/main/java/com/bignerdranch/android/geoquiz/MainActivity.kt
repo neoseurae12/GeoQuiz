@@ -16,18 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     private val quizViewModel: QuizViewModel by viewModels()
 
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true),
-    )
-
-    private var currentIndex = 0
-    private var score = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
@@ -38,21 +26,27 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
         binding.trueButton.setOnClickListener { view: View ->
-            checkAnswer(userAnswer = true)
+            val isCorrect = checkAnswer(userAnswer = true)
+            quizViewModel.score(isCorrect)
 
-            questionBank[currentIndex].isAnswered = true
+            quizViewModel.answer()
             updateAnswerButtons()
 
-            grade()
+            if (quizViewModel.isAllAnswered()) {
+                showGrade()
+            }
         }
 
         binding.falseButton.setOnClickListener { view: View ->
-            checkAnswer(userAnswer = false)
+            val isCorrect = checkAnswer(userAnswer = false)
+            quizViewModel.score(isCorrect)
 
-            questionBank[currentIndex].isAnswered = true
+            quizViewModel.answer()
             updateAnswerButtons()
 
-            grade()
+            if (quizViewModel.isAllAnswered()) {
+                showGrade()
+            }
         }
 
         binding.previousButton.setOnClickListener {
@@ -98,7 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun previousQuestion() {
-        currentIndex = (currentIndex - 1) % questionBank.size
+        quizViewModel.moveToPrevious()
 
         updateQuestion()
         updateAnswerButtons()
@@ -106,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun nextQuestion() {
-        currentIndex = (currentIndex + 1) % questionBank.size
+        quizViewModel.moveToNext()
 
         updateQuestion()
         updateAnswerButtons()
@@ -114,12 +108,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        val questionTextResId = questionBank[currentIndex].textResId
+        val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
     }
 
     private fun updateAnswerButtons() {
-        val isAnswered = questionBank[currentIndex].isAnswered
+        val isAnswered = quizViewModel.currentQuestionIsAnswered
         if (isAnswered) {
             binding.trueButton.isEnabled = false
             binding.falseButton.isEnabled = false
@@ -130,44 +124,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateNavigationButtons() {
-        val lastIndex = questionBank.size - 1
-        when (currentIndex) {
-            0 -> {
-                binding.previousButton.visibility = View.INVISIBLE
-                binding.nextButton.visibility = View.VISIBLE
-            }
-            lastIndex -> {
-                binding.previousButton.visibility = View.VISIBLE
-                binding.nextButton.visibility = View.INVISIBLE
-            }
-            else -> {
-                binding.previousButton.visibility = View.VISIBLE
-                binding.nextButton.visibility = View.VISIBLE
-            }
-        }
+        updatePreviousButton()
+        updateNextButton()
     }
 
-    private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
+    private fun updatePreviousButton() {
+        if (quizViewModel.isFirstQuestion())
+            binding.previousButton.visibility = View.INVISIBLE
+        else
+            binding.previousButton.visibility = View.VISIBLE
+    }
 
-        val (messageResId: Int, bonus: Int) = if (userAnswer == correctAnswer) {
-            Pair(R.string.correct_toast, 1)
+    private fun updateNextButton() {
+        if (quizViewModel.isLastQuestion())
+            binding.nextButton.visibility = View.INVISIBLE
+        else
+            binding.nextButton.visibility = View.VISIBLE
+    }
+
+    private fun checkAnswer(userAnswer: Boolean): Boolean {
+        val correctAnswer = quizViewModel.currentQuestionAnswer
+
+        val isCorrect = userAnswer == correctAnswer
+
+        val messageResId: Int = if (isCorrect) {
+            R.string.correct_toast
         } else {
-            Pair(R.string.incorrect_toast, 0)
+            R.string.incorrect_toast
         }
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
-        score += bonus
+
+        return isCorrect
     }
 
-    private fun grade() {
-        if (questionBank.all { it.isAnswered }) {
-            Log.d(TAG, "$score")
-            val percentageScore = 100.0 * score / questionBank.size
-            val message = String.format(getString(R.string.percentage_score), percentageScore)
-            Toast.makeText(this, message, Toast.LENGTH_SHORT)
-                .show()
-        }
+    private fun showGrade() {
+        val grade = quizViewModel.grade()
+        val message = String.format(getString(R.string.percentage_score), grade)
+        Toast.makeText(this, message, Toast.LENGTH_SHORT)
+            .show()
     }
 }
