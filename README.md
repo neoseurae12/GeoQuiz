@@ -1,6 +1,8 @@
 # GeoQuiz
 
-## View Binding
+## Interactive User Interfaces
+
+### View Binding
 
 ```kotlin
 binding = ActivityMainBinding.inflate(layoutInflater)
@@ -19,10 +21,20 @@ setContentView(binding.root)
     - 이미 inflate 되어 인스턴스화된 View 객체를 사용하여 Activity의 ContentView로 설정
     - 동적으로 View를 생성하거나 다른 레이아웃 파일에서 inflate한 View를 사용할 때 유용
 
-## Vector Drawable
+### Vector Drawable
+
+## The Activity Lifecycle
+
+## Persisting UI State
+
+### ViewModel
+
+1. 첫 질문에서는 PREV 버튼이 안 보여야 하고, 마지막 질문에서는 NEXT 버튼이 안 보이게 처리
 
 ## ViewModel
 
-## Saved Instance State
+### Saved Instance State
 
-## SavedStateHandle
+### SavedStateHandle
+
+### Instance State
