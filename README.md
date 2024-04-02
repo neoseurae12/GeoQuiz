@@ -29,7 +29,6 @@ setContentView(binding.root)
 
 ### ViewModel
 
-1. 첫 질문에서는 PREV 버튼이 안 보여야 하고, 마지막 질문에서는 NEXT 버튼이 안 보이게 처리
 
 ## ViewModel
 
@@ -37,4 +36,20 @@ setContentView(binding.root)
 
 ### SavedStateHandle
 
+### Android Jetpack Components (= Jetpack; Androidx)
+
 ### Instance State
+
+## Debugging Android Apps
+
+### Logcat
+
+### Debugger
+
+#### Conditional Breakpoints
+
+### Android Lint
+
+### 번외: Layout Inspector, Profiler
+
+## Testing
