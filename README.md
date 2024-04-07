@@ -53,3 +53,37 @@ setContentView(binding.root)
 ### 번외: Layout Inspector, Profiler
 
 ## Testing
+
+- Unit Testing
+- source sets
+  - main
+  - androidTest
+  - test (unitTest)
+- JUnit
+- assertion
+  - `@Before`
+  - `@After`
+  - `@Test`
+
+### JVM Tests
+
+- on my development machine
+- for ViewModel
+
+- given, when, then
+  - given => set-up
+  - when => test
+  - then => verify
+
+### Instrumented Tests
+
+- on an Android device
+- for Android components
+  - ex. Activity
+
+- Espresso
+  - fluent interface
+  - Espresso assertion
+    - view matcher
+    - view assertion
+- ActivityScenario
