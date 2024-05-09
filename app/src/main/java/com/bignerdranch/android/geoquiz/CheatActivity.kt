@@ -42,7 +42,6 @@ class CheatActivity : AppCompatActivity() {
         answerIsShown = intent.getBooleanExtra(EXTRA_ANSWER_SHOWN, false)   // 이전에 cheat 를 한 번이라도 했는가 여부
 
         binding.showAnswerButton.setOnClickListener {
-            //cheatViewModel.cheat()    // CheatActivity 에서는 currentIndex 가 MainActivity 의 currentIndex 처럼 업데이트 되는 게 아님
             cheatViewModel.isCheater = true
 
             showAnswer()

@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     ) { result ->
         // Handle the result
         if (result.resultCode == Activity.RESULT_OK) {
-            //quizViewModel.isCheater = result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
             quizViewModel.cheat()   // 문제 하나하나마다 cheater 판별을 따로 해줌
         }
     }
