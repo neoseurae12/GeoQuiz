@@ -36,6 +36,9 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
     val currentQuestionIsAnswered: Boolean
         get() = questionBank[currentIndex].isAnswered
 
+    val currentQuestionIsCheated: Boolean
+        get() = questionBank[currentIndex].isCheated
+
     var isCheater: Boolean
         get() = savedStateHandle.get(IS_CHEATER_KEY) ?: false
         set(value) = savedStateHandle.set(IS_CHEATER_KEY, value)
@@ -50,6 +53,10 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
 
     fun answer() {
         questionBank[currentIndex].isAnswered = true
+    }
+
+    fun cheat() {
+        questionBank[currentIndex].isCheated = true
     }
 
     fun grade(): Double {
